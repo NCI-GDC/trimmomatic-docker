@@ -1,5 +1,5 @@
-VERSION = 1.2.3
-DOCKER_REPO = software # Change me
+VERSION = 0.38
+DOCKER_REPO = trimmomatic
 
 SHORT_HASH := $(shell git rev-parse --short HEAD)
 DOCKER_URL := quay.io/ncigdc
@@ -29,7 +29,7 @@ build-docker:
 	@echo
 	@echo -- Building docker --
 	docker build . \
-		--file ../Dockerfile.multi \
+		--file ./Dockerfile \
 		--build-arg VERSION=${VERSION} \
 		-t "${DOCKER_IMAGE}" \
 		-t "${DOCKER_IMAGE_HASH}"
