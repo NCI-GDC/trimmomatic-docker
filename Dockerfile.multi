@@ -4,23 +4,21 @@ FROM ${REPOSITORY}/ncigdc/base-u22.04-builder:${BUILDER_TAG} AS builder
 
 ARG VERSION
 
-ENV URL=http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-${VERSION}.zip \
+ENV URL=http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-${VERSION}.zip
 
-RUN apt-get update \
-	&& apt-get install -y \
-	  wget \
-	  openjdk-8-jre-headless \
-	  unzip \
-	&& apt-get clean \
-	&& rm -rf /var/lib/apt/lists/*
+RUN mkdir -p /usr/share/man/man1 \
+    && apt-get update \
+	  && apt-get install -y \
+	      wget \
+	      openjdk-11-jre-headless \
+	      unzip \
+	  && apt-get clean \
+	  && rm -rf /var/lib/apt/lists/*
 
-RUN cd /opt \
-    && wget $URL \
+WORKDIR /opt
+
+RUN wget $URL \
     && unzip Trimmomatic-${VERSION}.zip \
     && ln -s /opt/Trimmomatic-${VERSION}/trimmomatic-${VERSION}.jar /bin/trimmomatic.jar \
     && rm Trimmomatic-${VERSION}.zip
-
-ENTRYPOINT ["java"]
-
-CMD ["-Xmx4G", "-jar", "/bin/trimmomatic.jar"]
 
